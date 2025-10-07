@@ -58,22 +58,18 @@ const main = async () => {
     .action(async (filename) => {
       logger.info(`Exporting all data to ${filename}...`);
       try {
-        const states = await findAllStates();
-        const allData = [];
-
-        for (const state of states) {
-          const cities = await findCitiesByStateUF(state.uf);
-          for (const city of cities) {
-            allData.push({
-              estado_id: state.id,
-              estado_uf: state.uf,
-              estado_nome: state.nome,
-              cidade_id: city.id,
-              cidade_nome: city.nome,
-            });
-          }
-        }
-
+        // Fetch all data with a single efficient query
+        const allData = await db('estados')
+          .join('cidades', 'estados.id', '=', 'cidades.estado_id')
+          .select(
+            'estados.id as estado_id',
+            'estados.uf as estado_uf',
+            'estados.nome as estado_nome',
+            'cidades.id as cidade_id',
+            'cidades.nome as cidade_nome'
+          )
+          .orderBy('estados.uf', 'cidades.nome');
+        
         const parser = new Parser();
         const csv = parser.parse(allData);
         await fs.writeFile(filename, csv);
