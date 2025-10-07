@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-const { syncAllData } = require('./services/DataSyncService');
-const db = require('./config/database');
+const { syncAllData } = require('./services/dataSyncService');
 const logger = require('./utils/logger');
 const { Command } = require('commander');
 const { findCitiesByStateUF, findAllStates } = require('./models/Location');
 const { Parser } = require('json2csv');
 const fs = require('fs/promises');
 const path = require('path');
-const os = require('os');
+const db = require('./config/database'); // Import db after other modules
 
 /**
  * Ensures the database directory exists and runs the latest migrations.
@@ -29,10 +28,10 @@ const main = async () => {
   program
     .name('ibge-cli')
     .description('A CLI tool to interact with IBGE location data.')
-    .version('1.0.0');
+    .version('1.0.21');
 
   // Ensures the database is ready before any command runs.
-  await initializeDatabase();
+  program.hook('preAction', initializeDatabase);
 
   program
     .command('import-data')
