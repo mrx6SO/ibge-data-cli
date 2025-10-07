@@ -6,6 +6,19 @@ const { Command } = require('commander');
 const { findCitiesByStateUF, findAllStates } = require('./models/Location');
 const { Parser } = require('json2csv');
 const fs = require('fs/promises');
+const path = require('path');
+const os = require('os');
+
+/**
+ * Ensures the database directory exists and runs the latest migrations.
+ * This makes the database ready before any command is executed.
+ */
+const initializeDatabase = async () => {
+  const dbPath = db.client.config.connection.filename;
+  const dbDir = path.dirname(dbPath);
+  await fs.mkdir(dbDir, { recursive: true });
+  await db.migrate.latest();
+};
 
 /**
  * Main function that processes command-line arguments.
@@ -17,6 +30,9 @@ const main = async () => {
     .name('ibge-cli')
     .description('A CLI tool to interact with IBGE location data.')
     .version('1.0.0');
+
+  // Ensures the database is ready before any command runs.
+  await initializeDatabase();
 
   program
     .command('import-data')
