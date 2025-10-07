@@ -26,6 +26,10 @@ const syncAllData = async () => {
   // Ensure the directory for the SQLite file exists before trying to connect.
   await ensureDatabaseDirectoryExists();
 
+  // Ensure the database schema is up to date before starting.
+  logger.info('Running database migrations...');
+  await db.migrate.latest();
+
   const trx = await db.transaction(); // Start a transaction
 
   try {
