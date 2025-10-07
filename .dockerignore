@@ -1,0 +1,25 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Dependencies
+node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local database and cache
+src/database/database.sqlite
+src/database/cache/
+
+# Tests
+tests/
+
+# Local environment files
+.env
