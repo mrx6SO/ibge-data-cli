@@ -8,8 +8,7 @@ yarn-debug.log*
 # Essencial para não publicar o banco de dados local ou o cache da API.
 src/database/
 
-# Arquivos de configuração de desenvolvimento
-knexfile.js
+# Arquivo de configuração do Docker
 Dockerfile
 
 # Pasta de testes e arquivos de configuração de teste

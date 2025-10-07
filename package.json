@@ -1,6 +1,6 @@
 {
   "name": "@rmderojr/ibge-data-cli",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "A CLI tool to fetch, store, and query Brazilian location data from the IBGE API.",
   "main": "src/app.js",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node src/app.js",
-  "test": "jest",
+    "test": "jest",
     "knex:migrate": "knex migrate:latest --knexfile knexfile.js"
   },
   "keywords": [
