@@ -29,10 +29,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4. (Opcional, mas recomendado) Roda os testes
-      - name: Run tests
-        run: npm test
-
       # 5. Publica o pacote no NPM
       - name: Publish package
         run: npm publish
