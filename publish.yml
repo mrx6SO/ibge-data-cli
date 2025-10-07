@@ -37,5 +37,5 @@ jobs:
       - name: Publish package
         run: npm publish
         env:
-          # Usa o token que configuramos nos Secrets do GitHub
+          # Usa o token do NPM armazenado como um Secret no repositório
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
