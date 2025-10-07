@@ -62,3 +62,4 @@ const syncAllData = async () => {
 module.exports = {
   syncAllData,
 };
+
