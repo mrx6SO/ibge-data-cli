@@ -1,6 +1,20 @@
-const db = require('../config/database');
+const knex = require('knex');
+const knexConfig = require('../../knexfile');
 const { getStates, getCitiesByState } = require('../api/ibgeClient');
 const logger = require('../utils/logger');
+const fs = require('fs/promises');
+const path = require('path');
+
+const db = knex(knexConfig.development);
+
+/**
+ * Ensures that the directory for the database file exists.
+ */
+const ensureDatabaseDirectoryExists = async () => {
+  const dbPath = knexConfig.development.connection.filename;
+  const dbDir = path.dirname(dbPath);
+  await fs.mkdir(dbDir, { recursive: true });
+};
 
 /**
  * Orchestrates fetching data from the IBGE API and persisting it to the database.
@@ -8,6 +22,9 @@ const logger = require('../utils/logger');
  */
 const syncAllData = async () => {
   logger.info('Starting IBGE data synchronization...');
+
+  // Ensure the directory for the SQLite file exists before trying to connect.
+  await ensureDatabaseDirectoryExists();
 
   const trx = await db.transaction(); // Start a transaction
 
@@ -62,4 +79,3 @@ const syncAllData = async () => {
 module.exports = {
   syncAllData,
 };
-
