@@ -31,7 +31,7 @@ jobs:
 
       # 5. Publica o pacote no NPM
       - name: Publish package
-        run: npm publish
+        run: npm publish --access public
         env:
           # Usa o token do NPM armazenado como um Secret no repositório
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

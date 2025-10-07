@@ -1,5 +1,5 @@
 {
-  "name": "ibge-data-cli",
+  "name": "@mrx6so/ibge-data-cli",
   "version": "1.0.0",
   "description": "A CLI tool to fetch, store, and query Brazilian location data from the IBGE API.",
   "main": "src/app.js",
