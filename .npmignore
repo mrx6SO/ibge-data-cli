@@ -2,11 +2,11 @@
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*
 
-# Diretório do banco de dados e cache.
-# Essencial para não publicar o banco de dados local ou o cache da API.
-src/database/
+# Ignora o arquivo do banco de dados e o cache, mas permite que a pasta
+# de migrations seja publicada.
+src/database/database.sqlite
+src/database/cache/
 
 # Arquivo de configuração do Docker
 Dockerfile
