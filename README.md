@@ -20,7 +20,7 @@ This tool is perfect for developers, data analysts, and students who need quick 
 You can install the CLI globally via npm to use it anywhere on your system.
 
 ```bash
-npm install -g ibge-data-cli
+npm install -g @rmderojr/ibge-data-cli
 ```
 
 ## Usage
