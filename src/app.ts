@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-require('ts-node/register');
 import { Command } from 'commander';
 import logger from './utils/logger';
 import { syncAllData } from './services/dataSyncService';
