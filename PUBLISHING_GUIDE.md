@@ -1,21 +1,23 @@
 # Guia de Batalha: Publicando e Atualizando Pacotes NPM com GitHub Actions
 
-Este documento é um resumo da saga para publicar o `@rmderojr/ibge-data-cli`. Ele serve como um guia para futuras atualizações e para a criação de novos pacotes, para nunca mais esquecer os detalhes e as armadilhas do processo.
+Este documento é um resumo da nossa saga para publicar o `@rmderojr/ibge-data-cli`. Ele serve como um guia para futuras atualizações e para a criação de novos pacotes, para que você nunca mais esqueça os detalhes e as armadilhas do processo.
 
 ---
 
-## Parte 1: A Estrutura do Projeto
+## Parte 1: A Estrutura do Projeto à Prova de Balas
 
 Todo pacote NPM de sucesso começa com uma boa estrutura.
 
-1.  **`package.json`**: O coração do projeto. Defina `name`, `version`, `description`, `main`, `bin` (para CLIs), `keywords`, etc.
-    *   **Nome do Pacote**: Se for um pacote novo, use um nome com escopo (`@seu-usuario-npm/nome-do-pacote`) desde o início para evitar conflitos.
-    *   **`"files"`**: Adicione este campo para dizer explicitamente ao NPM quais arquivos e pastas são essenciais e **devem** ser publicados. Isso evita o erro de `Cannot find module` após a instalação.
-    *   **`"publishConfig"`**: Para pacotes com escopo que devem ser públicos, adicione `"publishConfig": { "access": "public" }`. Isso resolve o traiçoeiro erro `404 Not Found` na publicação.
+1.  **`package.json`**: O coração do projeto.
+    *   **`"name"`**: **SEMPRE** use um nome com escopo (`@seu-usuario-npm/nome-do-pacote`) desde o início para evitar conflitos de nome.
+    *   **`"version"`**: Gerencie com `npm version` (ver Parte 3).
+    *   **`"bin"`**: Essencial para CLIs. Aponta para o seu arquivo executável.
+    *   **`"files"`**: **CRÍTICO**. Adicione este campo para dizer explicitamente ao NPM quais arquivos e pastas são essenciais e **devem** ser publicados. Isso evita o erro de `Cannot find module` após a instalação.
+    *   **`"publishConfig"`**: **OBRIGATÓRIO** para pacotes com escopo que devem ser públicos. Adicione `"publishConfig": { "access": "public" }`. Isso resolve o traiçoeiro erro `404 Not Found` na publicação.
 
-2.  **`.gitignore`**: Liste tudo que **não deve** ir para o repositório Git (ex: `node_modules`, `.env`, logs).
+2.  **`.gitignore`**: Liste tudo que **não deve** ir para o repositório Git (ex: `node_modules`, `.env`, logs, `Thumbs.db`, `.DS_Store`).
 
-3.  **`.npmignore`**: Liste tudo que **não deve** ir para o pacote NPM (ex: `__tests__/`, `jest.config.js`, `Dockerfile`). Se o campo `"files"` no `package.json` estiver bem configurado, este arquivo se torna menos crítico, mas ainda é uma boa prática.
+3.  **`.npmignore`**: Liste tudo que **não deve** ir para o pacote NPM (ex: `tests/`, `jest.config.js`, `Dockerfile`, `PUBLISHING_GUIDE.md`). Se o campo `"files"` no `package.json` estiver bem configurado, este arquivo se torna menos crítico, mas ainda é uma boa prática.
 
 4.  **`LICENSE.md`**: Essencial para qualquer projeto open-source. Use o template do MIT e **lembre-se de corrigir o ano do copyright!**
 
@@ -29,7 +31,7 @@ A automação é nossa amiga. Ela garante que toda publicação seja padronizada
 
 1.  **Crie o Arquivo de Workflow**: Crie o arquivo `.github/workflows/publish.yml`. O caminho é **crucial**. Se o arquivo não estiver nesta pasta, o GitHub Actions o ignorará.
 
-2.  **Configure o Token no GitHub**:
+2.  **Configure o Token do NPM no GitHub**:
     *   **NPM**: Vá em `npmjs.com` > `Access Tokens` > `Generate New Token` > `Automation`. Copie o token.
     *   **GitHub**: No seu repositório, vá em `Settings` > `Secrets and variables` > `Actions`. Crie um `New repository secret` com o nome `NPM_TOKEN` e cole o token do NPM.
 
@@ -55,7 +57,7 @@ Este é o fluxo que você seguirá para cada nova versão.
     npm install
     ```
 
-3.  **Crie um Commit com as Mudanças**: Adicione todos os arquivos alterados.
+3.  **Crie um Commit com as Mudanças**: Adicione todos os arquivos alterados, incluindo o `package-lock.json` novo.
     ```bash
     git add .
     git commit -m "feat: Adiciona nova funcionalidade incrível"
@@ -107,9 +109,13 @@ Um memorial dos erros que enfrentamos e suas soluções, para nunca mais esquece
     *   **CAUSA:** O `package-lock.json` está dessincronizado com o `package.json`.
     *   **SOLUÇÃO:** `rm -rf node_modules package-lock.json && npm install`, e depois comitar o novo `package-lock.json`.
 
-*   **ERRO:** `Cannot find module '...'` após instalar o pacote globalmente.
-    *   **CAUSA:** Arquivos essenciais para o runtime (como `knexfile.js` ou a pasta `src/`) não foram incluídos no pacote publicado.
+*   **ERRO:** `Cannot find module '...'` ou `SQLITE_ERROR: no such table: ...` após instalar o pacote globalmente.
+    *   **CAUSA:** Arquivos essenciais para o runtime (como `knexfile.js` ou a pasta `src/database/migrations`) não foram incluídos no pacote publicado.
     *   **SOLUÇÃO:** Adicionar um array `"files"` no `package.json` listando explicitamente tudo que deve ser publicado.
+
+*   **ERRO:** `SQLITE_CANTOPEN: unable to open database file` ou `no such table`.
+    *   **CAUSA:** O programa tenta usar o banco de dados antes que a pasta ou as tabelas tenham sido criadas.
+    *   **SOLUÇÃO:** Centralizar a inicialização do banco de dados no `app.js`, usando `program.hook('preAction', ...)` para garantir que, antes de qualquer comando, a pasta de dados seja criada e as migrations sejam executadas (`db.migrate.latest()`).
 
 *   **ERRO:** `tag 'vX.Y.Z' already exists` ao tentar criar uma tag.
     *   **CAUSA:** A tag já existe, provavelmente apontando para um commit antigo e quebrado.
@@ -123,3 +129,5 @@ Um memorial dos erros que enfrentamos e suas soluções, para nunca mais esquece
         ```
 
 ---
+
+Parabéns mais uma vez, Roberto! Essa jornada foi um curso intensivo de DevOps. Guarde este guia com carinho.

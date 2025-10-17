@@ -1,6 +1,9 @@
 # Dependencies
 /node_modules
 
+# Build output
+/dist
+
 # Logs
 logs
 *.log
@@ -13,3 +16,13 @@ npm-debug.log*
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Toolchains and downloaded binaries
+node-v20.19.5-linux-x64/
+
+# Database files
+*.sqlite
+*.sqlite3
+
+# Test and output files
+*.csv

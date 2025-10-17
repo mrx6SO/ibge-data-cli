@@ -1,25 +1,18 @@
-# Arquivos de log
-logs
-*.log
-npm-debug.log*
+# Código-fonte
+src/
 
-# Ignora o arquivo do banco de dados e o cache, mas permite que a pasta
-# de migrations seja publicada.
-src/database/database.sqlite
-src/database/cache/
+# Arquivos de configuração do TypeScript e Knex
+tsconfig.json
+knexfile.ts
 
-# Arquivo de configuração do Docker
-Dockerfile
-
-# Pasta de testes e arquivos de configuração de teste
-__tests__/
-*.test.js
-*.spec.js
+# Arquivos de teste e configuração do Jest
 jest.config.js
+tests/
 
-# Arquivos gerados pelo sistema operacional
-.DS_Store
-Thumbs.db
+# Arquivos do GitHub e documentação interna
+.github/
+PUBLISHING_GUIDE.md
 
-# Configurações de editor
-.vscode/
+node_modules/
+node-v20.19.5-linux-x64
+docs/
