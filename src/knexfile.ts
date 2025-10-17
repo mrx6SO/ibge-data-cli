@@ -20,7 +20,7 @@ export function createConfig(dbPath?: string): Knex.Config {
       filename: dbPath || defaultDbPath,
     },
     migrations: {
-      directory: path.resolve(__dirname, '../dist/database/migrations'),
+      directory: path.resolve(__dirname, './database/migrations'),
       loadExtensions: ['.js']
     },
     useNullAsDefault: true,
