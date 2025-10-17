@@ -29,7 +29,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 5. Publica o pacote no NPM
+      # 4. Roda os testes
+      - name: Run tests
+        run: npm test
+
+      # 5. Compila o código TypeScript para JavaScript
+      - name: Build project
+        run: npm run build
+
+      # 6. Publica o pacote no NPM
       - name: Publish package
         run: npm publish --access public
         env:
