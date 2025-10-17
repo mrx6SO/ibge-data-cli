@@ -1,13 +1,27 @@
 import { createObjectCsvWriter } from 'csv-writer';
 import { getDbConnection } from '../database/connection';
 import logger from '../utils/logger';
+import { Estado } from '../index'; // Reutilizando a interface já definida
 
-// Interface sugerida para tipar os dados da cidade
 interface City {
   id: number;
   nome: string;
   estado_id: number;
-  // Adicione aqui outros campos relevantes da sua query de cidades
+}
+
+/**
+ * Fetches all states from the database.
+ * @param dbPath Optional path to the database file.
+ * @returns A promise that resolves to an array of state objects.
+ */
+export async function listStates(dbPath?: string): Promise<Estado[]> {
+  const db = await getDbConnection(dbPath);
+  try {
+    const states = await db('estados').select('id', 'nome', 'uf', 'regiao_nome').orderBy('nome');
+    return states;
+  } finally {
+    await db.destroy();
+  }
 }
 
 /**
@@ -16,7 +30,7 @@ interface City {
  * @param dbPath Optional path to the database file.
  * @returns A promise that resolves to an array of city objects.
  */
-export async function listCitiesByUF(uf: string, dbPath?: string): Promise<City[]> {
+export async function listCitiesByUF(uf: string, dbPath?: string): Promise<any[]> {
   const db = await getDbConnection(dbPath);
   try {
     const state = await db('estados').where('uf', uf.toUpperCase()).first();
@@ -24,9 +38,8 @@ export async function listCitiesByUF(uf: string, dbPath?: string): Promise<City[
       logger.warn(`State with UF "${uf}" not found.`);
       return [];
     }
-    // O retorno deve ser tipado como um array de City
-    const cities = await db('cidades').where('estado_id', state.id).orderBy('nome');
-    return cities as City[];
+    const cities = await db('cidades').where('estado_id', state.id).select('id', 'nome').orderBy('nome');
+    return cities;
   } finally {
     await db.destroy();
   }
@@ -40,8 +53,6 @@ export async function listCitiesByUF(uf: string, dbPath?: string): Promise<City[
 export async function exportToCSV(outputFilePath: string, dbPath?: string): Promise<void> {
   const db = await getDbConnection(dbPath);
   try {
-    // ... restante da lógica de exportação ...
-    // Note que todos os parâmetros (outputFilePath e dbPath) estão tipados como string/opcional
     const data: any[] = await db('estados') // Tipagem temporária para 'data' se a estrutura for complexa
       .join('cidades', 'estados.id', '=', 'cidades.estado_id')
       .select('estados.uf', 'estados.nome as estado_nome', 'cidades.nome as cidade_nome')
