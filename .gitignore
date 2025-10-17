@@ -26,3 +26,6 @@ node-v20.19.5-linux-x64/
 
 # Test and output files
 *.csv
+
+# Internal documentation
+PUBLISHING_GUIDE.md
