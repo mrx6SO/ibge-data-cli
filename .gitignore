@@ -29,3 +29,6 @@ node-v20.19.5-linux-x64/
 
 # Internal documentation
 PUBLISHING_GUIDE.md
+
+# Local scripts
+activate-env.sh
