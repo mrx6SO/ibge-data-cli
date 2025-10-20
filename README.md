@@ -35,13 +35,6 @@ ibge-data-cli import-data
 ### 2. List Cities by State
 Once the data is imported, you can list all cities for a given state using its two-letter abbreviation (UF).
 
-### 3. List All States 
-Listing all states is done by the following command:
-
-```bash
-ibge-data-cli list-states
-```
-
 ```bash
 ibge-data-cli list-cities <UF>
 ```
@@ -49,6 +42,13 @@ ibge-data-cli list-cities <UF>
 **Example:**
 ```bash
 ibge-data-cli list-cities SP
+```
+
+### 3. List All States 
+Listing all states is done by the following command:
+
+```bash
+ibge-data-cli list-states
 ```
 
 ### 3. Export to CSV
