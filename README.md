@@ -6,7 +6,7 @@
 
 `ibge-data-cli` is a command-line interface (CLI) tool to fetch, store, and query Brazilian location data (states and cities) from the official IBGE API.
 
-This tool is perfect for developers, data analysts, and students who need quick and offline access to this public data.
+This tool is designed for developers, data analysts, and students who need quick and offline access to this public data.
 
 ## Features
 
